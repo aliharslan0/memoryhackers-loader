@@ -49,6 +49,7 @@ def main():
         raise ProcessLookupError('Process not found.')
 
     ws = create_connection('ws://localhost:9002')
+    ws.recv()
     data = {
         'method': 'load',
         'json': {
