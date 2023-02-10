@@ -1,13 +1,14 @@
 import json
 import os
 import pathlib
-import re
 import socket
 import subprocess
 import time
-import urllib.request
 import zipfile
 from datetime import datetime
+
+import requests
+import websocket
 
 
 def parse_dotenv(file_path):
@@ -17,7 +18,6 @@ def parse_dotenv(file_path):
 
 
 config = parse_dotenv('.env')
-pattern = re.compile(r"^[a-zA-Z0-9_]+\.[a-zA-Z0-9-]+\.([a-zA-Z0-9-]+\.)*[a-zA-Z0-9_]+$")
 
 
 def set_key(file_path, key, value, quote_mode='never'):
@@ -38,21 +38,17 @@ def set_key(file_path, key, value, quote_mode='never'):
 
 
 def get_m_data():
-    input_string = input('mData: ')
-    if re.match(pattern, input_string):
-        return input_string
-    else:
-        return None
+    return input('mData: ').replace('\n', '').strip()
 
 
 def update_loader():
-    url = urllib.request.urlopen('https://raw.githubusercontent.com/sbyteui-bot/ldr/main/data/link.txt').read().decode()
+    url = requests.get('https://raw.githubusercontent.com/sbyteui-bot/ldr/main/data/link.txt').text
     zip_path = url.split('/')[-1]
     if zip_path == config['ZIP_PATH']:
         return False
 
     with open(zip_path, 'wb') as file:
-        content = urllib.request.urlopen(url).read()
+        content = requests.get(url).content
         file.write(content)
 
     old_path = pathlib.Path(config['ZIP_PATH'])
@@ -71,14 +67,12 @@ def main():
         zf.extractall(pwd=b'mh')
         os.startfile(zf.filelist[0].filename)
 
-    timeout = 10
     process_found = False
-    while timeout > 0:
+    for i in range(9):
         out = subprocess.check_output(['TASKLIST', '/FI', 'imagename eq gtnszz.exe'])
         if b'gtnszz.exe' in out:
             process_found = True
             break
-        timeout -= 1
         time.sleep(1)
 
     if not process_found:
@@ -92,17 +86,14 @@ def main():
         config['LAST_RUN'] = current_time.isoformat()
         update_mdata = True
 
-    for i in range(10):
+    for i in range(9):
         try:
-            ws = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            ws.settimeout(1)
-            ws.connect(("localhost", 9002))
+            ws = websocket.create_connection('ws://localhost:9002', timeout=1)
             break
-        except (ConnectionRefusedError, socket.timeout) as e:
-            if i == 9:
-                raise e
+        except (ConnectionError, socket.timeout):
+            time.sleep(1)
 
-    ws.recv(1024)
+    ws.recv()
     payload = {
         'method': 'load',
         'json': {
@@ -111,13 +102,10 @@ def main():
             'id': config['ID']
         }
     }
-
     payload['json'] = json.dumps(payload['json'])
-    json_str = json.dumps(payload)
+    payload = json.dumps(payload)
 
-    ws.send(json_str.encode("utf-8"))
-
-    ws.close()
+    ws.send(payload)
 
     if update_mdata:
         set_key('.env', 'MDATA', config['MDATA'], quote_mode='never')
