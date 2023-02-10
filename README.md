@@ -2,7 +2,7 @@
 
 `.env` dosyasındaki MDATA[^1], B64[^2] ve ID[^3] boşluklarını doldurun, `pip install -r requirements.txt` komutunu çalıştırın ve son olarak `main.py` dosyasını çalıştırın.
 
-Eğer bir hilenin durumu fark etmeksizin, MDATA, B64 ve ID değerlerine sahipseniz hile çalışacaktır. Ancak, "güncelleniyor" veya "çalışmıyor" durumunda olan hileleri bu yöntemle çalıştırmak hileyi güncellemeyecek veya çalışır hale getirmeyecektir. Bu script sadece bir saat için kullanıcı arayüzünü kullanmadan hileyi çalıştırmanızı sağlar. Ayrıca, B64 ve ID kodlarına sahip olmanız durumunda, erişiminiz olmayan hilelerin çalışıp çalışmayacağı kesin değildir ve istemcinin sunucu ile bağlantı kurup kurmayacağına bağlıdır.
+Bir hilenin B64 ve ID değerlerine sahipseniz, çalışıyor durumda gözükmese bile çalışacaktır. Ancak, "güncelleniyor" veya "çalışmıyor" durumunda olan hileleri bu yöntemle çalıştırmak hileyi güncellemeyecek veya çalışır hale getirmeyecektir. Bu script sadece, bir saat için kullanıcı arayüzünü kullanmadan hileyi çalıştırmanızı sağlar. Ayrıca, B64 ve ID kodlarına sahip olmanız durumunda, erişiminiz olmayan hilelerin çalışıp çalışmayacağı kesin değildir.
 
 [^1]: ![mdata](https://user-images.githubusercontent.com/97433474/218167255-022c6baf-dc37-4cd4-93e2-6cbff35706c2.png)
 [^2]: ![resim](https://user-images.githubusercontent.com/97433474/218167527-70fcd935-0da8-4ef9-a3d9-40a8a77a43e0.png) rdCheat fonksiyonunun ilk parametresi.
