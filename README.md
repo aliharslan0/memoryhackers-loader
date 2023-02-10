@@ -1,6 +1,6 @@
 # memoryhackers-loader
 
-`.env` dosyasındaki MDATA[^1], B64[^2] ve ID[^3] boşluklarını doldurun, `pip install -r requirements.txt` komutunu çalıştırın ve son olarak main.py dosyasını çalıştırın.
+`.env` dosyasındaki MDATA[^1], B64[^2] ve ID[^3] boşluklarını doldurun, `pip install -r requirements.txt` komutunu çalıştırın ve son olarak `main.py` dosyasını çalıştırın.
 
 Hilenin durumu fark etmeksizin eğer MDATA, B64 ve ID değerlerine sahipseniz hile çalışacaktır.
 
